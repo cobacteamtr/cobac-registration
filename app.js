@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
-const PORT = process.env.PORT || 3000;
+const PORT = 3327;
 
 // --------------------------------------------------
 // Middleware
@@ -18,8 +18,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json({ limit: '1mb' }));
 
-// Serve frontend assets under the '/public' prefix so both 
-// http://localhost:3000/public/... and https://register.cobac.com.tr/public/... resolve correctly.
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Also serve static files from root for standard assets if referenced directly
