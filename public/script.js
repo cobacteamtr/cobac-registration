@@ -235,10 +235,11 @@ function cobacForm() {
             try {
                 // Dynamically route endpoint based on environment (Local vs Production cPanel)
                 let endpoint = '/api/submit-form';
-                if (window.location.port === '5500' || window.location.hostname === '127.0.0.1') {
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     endpoint = 'http://localhost:3000/api/submit-form';
+                } else {
+                    endpoint = 'https://your-render-app-name.onrender.com/api/submit-form';
                 }
-
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {

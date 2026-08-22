@@ -42,10 +42,9 @@ app.get('/api/health', (req, res) => {
 
 async function appendRecordToSheet(formData) {
     const auth = new google.auth.GoogleAuth({
-        keyFile: path.join(__dirname, 'credentials.json'),
-        scopes: [
-            'https://www.googleapis.com/auth/spreadsheets'
-        ]
+        credentials: process.env.GOOGLE_CREDENTIALS_JSON ? JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON) : undefined,
+        keyFile: process.env.GOOGLE_CREDENTIALS_JSON ? undefined : path.join(__dirname, 'credentials.json'),
+        scopes: ['https://www.googleapis.com/auth/spreadsheets']
     });
 
     const client = await auth.getClient();
