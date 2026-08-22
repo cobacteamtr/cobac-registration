@@ -1,0 +1,36 @@
+{
+  "artifactVersion": "benyaptim-export-v1",
+  "projectName": "CoBAC Registration Form Name and Surname * Kısa ya…",
+  "generationMode": "html_v1",
+  "exportedAt": "2026-08-13T13:19:35.277Z",
+  "entryFile": "index.html",
+  "packageManagerRequired": false,
+  "sourceFileCount": 2,
+  "exportedFileCount": 6,
+  "files": [
+    {
+      "path": "index.html",
+      "source": "project_file"
+    },
+    {
+      "path": "README.md",
+      "source": "metadata"
+    },
+    {
+      "path": "benyaptim.manifest.json",
+      "source": "project_file"
+    },
+    {
+      "path": "assets/project-assets.json",
+      "source": "metadata"
+    },
+    {
+      "path": "assets/README.md",
+      "source": "metadata"
+    },
+    {
+      "path": "benyaptim-export-manifest.json",
+      "source": "metadata"
+    }
+  ]
+}

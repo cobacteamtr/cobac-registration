@@ -1,0 +1,27 @@
+{
+    "name": "cobac-registration-form",
+    "version": "1.0.0",
+    "description": "CoBAC registration form",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "start": "node app.js",
+        "dev:backend": "nodemon app.js",
+        "dev:frontend": "npx serve . -l 5500",
+        "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.6",
+        "express": "^4.21.2",
+        "googleapis": "^176.0.0"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2",
+        "nodemon": "^3.1.14",
+        "serve": "^14.2.1",
+        "vercel": "^54.17.3"
+    }
+}

@@ -1,0 +1,881 @@
+<!-- DESIGN_DIRECTION: luxury_dark | PALETTE: Noir & Gold | TYPOGRAPHY: Cormorant + Karla | SECTOR: beauty -->
+<!doctype html>
+<html lang="en" class="h-full bg-white text-neutral-900 dark:bg-black dark:text-white selection:bg-red-600 selection:text-white" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registration Form | CoBAC Workspace </title>
+    <meta name="description" content="CoBAC Workspace membership registration and entrance portal. Complete your registration for a premium co-working experience." />
+    <link rel="icon" type="image/png" href="/icon.png">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="CoBAC Workspace | Registration Portal" />
+    <meta property="og:description" content="Start your membership in the heart of the historic peninsula for an inspiring working experience." />
+    <meta property="og:type" content="website" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..1000;1,9..40,300..1000&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet" />
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"DM Sans"', "sans-serif"],
+                        display: ['"DM Sans"', "sans-serif"],
+                    },
+                    colors: {
+                        brand: {
+                            50: "#fef2f2",
+                            100: "#fee2e2",
+                            200: "#fecaca",
+                            300: "#fca5a5",
+                            400: "#f87171",
+                            500: "#ef4444",
+                            600: "#dc2626",
+                            700: "#b91c1c",
+                            800: "#991b1b",
+                            900: "#7f1d1d",
+                            red: "#d61a1a",
+                            blue: "#0030a7",
+                        },
+                    },
+                },
+            },
+        };
+    </script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Custom Stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="min-h-screen antialiased overflow-x-hidden flex flex-col bg-cover bg-center bg-no-repeat bg-fixed text-neutral-900 dark:text-white transition-colors duration-300 relative" :style="darkMode ? 'background-image: url(\'/bg1.jpeg\');' : 'background-image: url(\'/bg2.jpeg\');'"
+    x-data="cobacForm()">
+
+    <!-- Optional Dark/Light Overlay to keep text readable over complex images -->
+    <div class="absolute inset-0 bg-white/20 dark:bg-black/50 pointer-events-none z-0"></div>
+
+    <!-- Wrap your main page contents in a relative container so they sit above the overlay -->
+    <div class="relative z-10 flex flex-col min-h-screen bg-transparent dark:bg-transparent">
+        <!-- SECTION: header -->
+        <header class="w-full border-b border-neutral-200 dark:border-neutral-800 dark:bg-transparent backdrop-blur-md sticky top-0 z-50 transition-all duration-300">
+            <div class="bg-transparent dark:bg-transparent max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                <!-- Logo / Brand -->
+                <a href="https://cobac.com.tr" class="flex items-center gap-3 group">
+                    <img src="/image-red.png" alt="CoBAC Workspace Logo" class="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+                </a>
+
+                <!-- Quick Trust Info & Theme Toggle -->
+                <div class="flex items-center gap-6 text-sm text-neutral-900 dark:text-neutral-300 font-medium">
+                    <!-- Language Switcher Dropdown -->
+                    <div class="relative" x-data="{ open: false }">
+                        <button @click="open = !open" class="px-3 py-2 rounded-xl bg-transparent border border-neutral-200 dark:border-neutral-800 text-xs font-bold flex items-center gap-2 text-neutral-700 dark:text-neutral-300">
+              <i class="fa-solid fa-globe text-brand-red"></i>
+              <span x-text="currentLang.toUpperCase()"></span>
+            </button>
+
+                        <div x-show="open" @click.away="open = false" class="absolute right-0 mt-2 w-28 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-lg py-1 z-50">
+                            <button @click="switchLanguage('en'); open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-neutral-100 dark:hover:bg-neutral-850 dark:hover:text-black text-neutral-900 dark:text-neutral-300">
+                English
+              </button>
+                            <button @click="switchLanguage('tr'); open = false" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-neutral-100 dark:hover:bg-neutral-850 dark:hover:text-black text-neutral-900 dark:text-neutral-300">
+                Türkçe
+              </button>
+                        </div>
+                    </div>
+
+                    <div class="hidden md:flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-brand-red"></i>
+                        <span x-text="t('nav_location')" class="text-neutral-600 dark:text-white"></span>
+                    </div>
+                    <div class="hidden md:block w-1.5 h-1.5 rounded-full bg-green-600 dark:bg-neutral-700 animate-pulse"></div>
+                    <div class="hidden md:flex items-center gap-2">
+                        <i class="fa-solid fa-shield-halved text-emerald-600 dark:text-emerald-500"></i>
+                        <span x-text="t('nav_secure')" class="text-neutral-600 dark:text-white"></span>
+                    </div>
+
+                    <!-- Theme Toggle Button in Navigation -->
+                    <button @click="darkMode = !darkMode" class="w-10 h-10 rounded-xl bg-transparent dark:bg-transparent border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-neutral-700 dark:text-neutral-300 hover:text-brand-red dark:hover:text-white hover:border-neutral-300 dark:hover:border-neutral-700 transition-colors shadow-sm cursor-pointer"
+                        :aria-label="darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'">
+            <i
+              class="fa-solid"
+              :class="darkMode ? 'fa-sun text-brand-lightred' : 'fa-moon text-neutral-600'"
+            ></i>
+          </button>
+                </div>
+            </div>
+        </header>
+        <!-- /SECTION: header -->
+
+        <!-- MAIN FORM WRAPPER -->
+        <main class="flex-1 bg-transparent flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 relative dark:bg-transparent transition-colors duration-300">
+            <!-- Background Ambient Glows -->
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-brand-red/5 dark:bg-brand-red/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-red-600/5 dark:bg-red-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <div class="max-w-5xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
+                <!-- Left Information 50 (Only visible before success) -->
+                <div class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-8 shadow-xl lg:col-span-5 space-y-6 text-left lg:sticky lg:top-28" x-show="!submitted" x-transition:enter="transition ease-out duration-300"
+                    x-transition:leave="transition ease-in duration-300">
+                    <div x-text="t('form_title')" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs text-brand-red tracking-wide uppercase font-display font-semibold shadow-sm">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-pulse"></span> Quick Entry Form
+                    </div>
+
+                    <h1 class="text-3xl lg:text-4xl font-bold font-display tracking-tight text-neutral-900 dark:text-white leading-tight">
+                        <span x-text="t('hero_title_1')"></span> <br />
+                        <span class="text-brand-red font-extrabold" x-text="t('hero_title_2')"></span>
+                    </h1>
+
+                    <!-- SECTION: intro -->
+                    <div class="p-3 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm space-y-3 shadow-sm">
+                        <h3 x-text="t('reg_form_title')" class="text-lg font-bold text-brand-red font-display">
+
+                        </h3>
+                        <p x-text="t('reg_form_desc')" class="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                        </p>
+                    </div>
+                    <!-- /SECTION: intro -->
+
+                    <!-- Quick Features -->
+                    <div class="space-y-4 pt-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid fa-wifi text-brand-red dark:text-brand-lightred text-xs animate-ping"></i>
+                            </div>
+                            <div>
+                                <h4 x-text="t('feature_title_1')" class="text-sm font-semibold text-neutral-900 dark:text-white">
+
+                                </h4>
+                                <p x-text="t('feature_desc_1')" class="text-xs text-neutral-500 dark:text-neutral-400">
+
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid fa-mug-hot text-brand-red dark:text-brand-lightred text-xs animate-bounce"></i>
+                            </div>
+                            <div>
+                                <h4 x-text="t('feature_title_2')" class="text-sm font-semibold text-neutral-900 dark:text-white">
+                                </h4>
+                                <p x-text="t('feature_desc_2')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid fa-calendar-check text-brand-red dark:text-brand-lightred text-xs animate-spin"></i>
+                            </div>
+                            <div>
+                                <h4 x-text="t('feature_title_3')" class="text-sm font-semibold text-neutral-900 dark:text-white">
+                                </h4>
+                                <p x-text="t('feature_desc_3')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <div class="w-8 h-8 rounded-lg bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 flex items-center justify-center shrink-0 shadow-sm">
+                                <i class="fa-solid fa-chair text-brand-red dark:text-brand-lightred text-xs animate-pulse"></i>
+                            </div>
+                            <div>
+                                <h4 x-text="t('feature_title_4')" class="text-sm font-semibold text-neutral-900 dark:text-white">
+                                </h4>
+                                <p x-text="t('feature_desc_4')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live stats as Social Proof -->
+                    <div class="pt-6 border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center text-center gap-4">
+                        <div>
+                            <p class="text-xl sm:text-2xl font-bold font-display text-brand-red dark:text-brand-lightred">
+                                4.8
+                            </p>
+                            <p x-text="t('google_rating')" class="text-[9px] uppercase text-neutral-500 dark:text-neutral-400 tracking-wider font-bold">
+                            </p>
+                        </div>
+                        <div class="h-8 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div>
+                            <p class="text-xl sm:text-2xl font-bold font-display text-brand-red dark:text-brand-lightred">
+                                7,500+
+                            </p>
+                            <p x-text="t('people_experienced')" class="text-[9px] uppercase text-neutral-500 dark:text-neutral-400 tracking-wider font-bold">
+                            </p>
+                        </div>
+                        <div class="h-8 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+                        <div>
+                            <p x-text="t('globally')" class="text-xl sm:text-2xl font-bold font-display text-brand-red dark:text-brand-lightred">
+                            </p>
+                            <p x-text="t('minded')" class="text-[9px] uppercase text-neutral-500 dark:text-neutral-400 tracking-wider font-bold">
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Interactive Form / Success Column -->
+                <div class="lg:col-span-7 w-full">
+                    <!-- Success State Container -->
+                    <div x-show="submitted" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95 translate-y-4" x-transition:enter-end="opacity-100 scale-100 translate-y-0" class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-8 shadow-xl text-center space-y-8 relative overflow-hidden"
+                        style="display: none">
+                        <!-- Decorative Radial Glow -->
+                        <div class="absolute -top-12 -left-12 w-48 h-48 bg-brand-red/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                        <!-- Success Icon & Celebration -->
+                        <div class="relative inline-flex items-center justify-center">
+                            <div class="absolute inset-0 w-24 h-24 bg-brand-red/20 rounded-full blur-xl animate-pulse"></div>
+                            <div class="w-16 h-16 rounded-full bg-brand-red flex items-center justify-center text-white text-2xl relative z-10 shadow-lg shadow-brand-red/20">
+                                <i class="fa-solid fa-check-double"></i>
+                            </div>
+                        </div>
+
+                        <!-- Closing Message -->
+                        <!-- SECTION: outro -->
+                        <div class="space-y-3 max-w-md mx-auto">
+                            <h2 class="text-2xl lg:text-3xl font-bold font-display text-neutral-900 dark:text-white tracking-tight">
+                                Registration Successful!
+                            </h2>
+                            <p class="text-sm text-neutral-600 dark:text-neutral-300">
+                                Thank you for your time! We wish you have a wonderful day at CoBAC.
+                            </p>
+                        </div>
+                        <!-- /SECTION: outro -->
+
+                        <!-- Simulated Digital Entry Pass Card -->
+                        <div class="border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black rounded-2xl text-left relative max-w-sm mx-auto shadow-xl overflow-hidden">
+                            <!-- Top Crimson banner -->
+                            <div class="bg-brand-red px-6 py-4 flex justify-between items-center text-white">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-6 h-6 rounded bg-black flex items-center justify-center text-brand-red font-bold text-xs">
+                                        C
+                                    </div>
+                                    <span class="text-xs font-display font-bold tracking-wider">CoBAC PASS</span
+                  >
+                </div>
+                <span
+                  class="text-[10px] bg-white/20 text-white px-2 py-0.5 rounded-full font-mono uppercase tracking-widest font-bold"
+                  >ACTIVE</span
+                >
+              </div>
+
+              <!-- Ticket Details -->
+              <div class="p-6 space-y-6">
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <span
+                      class="text-neutral-400 dark:text-neutral-500 block uppercase tracking-wider text-[9px] font-bold"
+                      >MEMBER NAME</span
+                    >
+                    <span
+                      class="text-neutral-900 dark:text-white font-bold text-sm block truncate"
+                      x-text="formData.name"
+                    ></span>
+                                </div>
+                                <div>
+                                    <span class="text-neutral-400 dark:text-neutral-500 block uppercase tracking-wider text-[9px] font-bold">MEMBERSHIP TYPE</span
+                    >
+                    <span
+                      class="text-brand-red font-bold text-sm block"
+                      x-text="getMembershipLabel(formData.membership)"
+                    ></span>
+                                </div>
+                                <div>
+                                    <span class="text-neutral-400 dark:text-neutral-500 block uppercase tracking-wider text-[9px] font-bold">CITY / COUNTRY</span
+                    >
+                    <span
+                      class="text-neutral-600 dark:text-neutral-300 font-medium block truncate"
+                      x-text="formData.cityCountry"
+                    ></span>
+                                </div>
+                                <div>
+                                    <span class="text-neutral-400 dark:text-neutral-500 block uppercase tracking-wider text-[9px] font-bold">ENTRY DATE</span
+                    >
+                    <span
+                      class="text-neutral-600 dark:text-neutral-300 font-medium block"
+                      x-text="getTodayDate()"
+                    ></span>
+                                </div>
+                            </div>
+
+                            <!-- Ticket Notch effect left & right -->
+                            <div class="absolute left-0 top-[52%] -translate-y-1/2 w-4 h-8 bg-neutral-100 dark:bg-neutral-900 rounded-r-full border-r border-t border-b border-neutral-200 dark:border-neutral-800"></div>
+                            <div class="absolute right-0 top-[52%] -translate-y-1/2 w-4 h-8 bg-neutral-100 dark:bg-neutral-900 rounded-l-full border-l border-t border-b border-neutral-200 dark:border-neutral-800"></div>
+
+                            <!-- QR Code & Instructions -->
+                            <div class="pt-4 border-t border-dashed border-neutral-200 dark:border-neutral-800 flex items-center justify-between gap-4">
+                                <div>
+                                    <h5 class="text-xs font-bold text-neutral-900 dark:text-white">
+                                        Entry QR Code
+                                    </h5>
+                                    <p class="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">
+                                        Present this QR code to the scanner at reception for fast access.
+                                    </p>
+                                </div>
+                                <!-- QR Code SVG -->
+                                <div class="w-16 h-16 bg-white border border-neutral-200 dark:border-neutral-800 p-1 rounded-lg shrink-0 flex items-center justify-center shadow-sm">
+                                    <svg class="w-full h-full text-neutral-900" viewBox="0 0 100 100" fill="currentColor">
+                      <path
+                        d="M5 5h30v30H5V5zm6 6v18h18V11H11zm54-6h30v30H65V5zm6 6v18h18V11H71zM5 65h30v30H5V65zm6 6v18h18V71H11zm59-6h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zm-30 10h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zm-20 10h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zm-30 10h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zm10 0h5v5h-5v-5zM20 20h2v2h-2v-2zm0-2h2v2h-2v-2zm60 2h2v2h-2v-2zm0-2h2v2h-2v-2zM20 80h2v2h-2v-2zm0-2h2v2h-2v-2z"
+                      />
+                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reset Button -->
+                    <div class="pt-2">
+                        <button @click="resetForm()" class="px-6 py-2.5 rounded-full border border-neutral-200 dark:border-neutral-800 text-xs text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:border-neutral-400 dark:hover:border-neutral-600 transition-colors bg-white dark:bg-neutral-900 shadow-sm font-semibold">
+                Create New Registration
+              </button>
+                    </div>
+                </div>
+
+                <!-- Form Section (Multi-step) -->
+                <!-- SECTION: form_section -->
+                <form @submit.prevent="submitForm" x-show="!submitted" class="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-sm space-y-8 relative overflow-hidden transition-colors duration-300" x-transition:enter="transition duration-300">
+
+                    <!-- Decorative Animated Background Icon -->
+
+                    <div class="absolute -top-5 -left-5 w-40 h-40 pointer-events-none opacity-5 dark:opacity-[0.25] transition-opacity duration-300 z-0">
+                        <img src="/half-c-top-left.png" alt="" class="w-full h-full object-contain animate-float-rotate" />
+                    </div>
+
+                    <div class="absolute top-[35%] right-[15%] w-40 h-40 pointer-events-none opacity-5 dark:opacity-[0.25] transition-opacity duration-300 z-0">
+                        <img src="/half-c.png" alt="" class="w-full h-full object-contain animate-float-rotate-opp" />
+                    </div>
+
+                    <div class="absolute -bottom-10 -left-5 w-40 h-40 pointer-events-none opacity-5 dark:opacity-[0.25] transition-opacity duration-300 z-0">
+                        <img src="/half-c.png" alt="" class="w-full h-full object-contain animate-float-rotate" />
+                    </div>
+
+                    <!-- Progress Header -->
+                    <div class="space-y-2 relative z-10">
+                        <div class="flex justify-between items-center text-xs text-neutral-500 dark:text-neutral-400 font-display font-bold">
+                            <span>
+            <span x-text="t('step')"></span>
+                            <strong x-text="currentStep" class="text-brand-red dark:text-brand-lightred"></strong> / 3
+                            </span>
+                            <span x-text="getStepTitle()" class="text-brand-red dark:text-brand-lightred"></span>
+                        </div>
+                        <div class="w-full h-1.5 bg-neutral-200 dark:bg-neutral-800 rounded-full overflow-hidden">
+                            <div class="h-full bg-gradient-to-r from-brand-red to-brand-lightred transition-all duration-300" :style="`width: ${(currentStep / 3) * 100}%`"></div>
+                        </div>
+                    </div>
+
+                    <!-- Form Step 1: Personal Details -->
+                    <div x-show="currentStep === 1" x-transition:enter="transition ease-out duration-200" class="space-y-6">
+                        <div class="space-y-1">
+                            <h2 x-text="t('step_title_1')" class="text-xl font-bold font-display text-neutral-900 dark:text-white">
+                            </h2>
+                            <p x-text="t('step_desc_1')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                            </p>
+                        </div>
+                        <!-- Name and Surname -->
+                        <div class="space-y-2">
+                            <label for="name" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                            <span x-text="t('full_name')"></span>
+                            <span class="text-brand-red">*</span>
+                        </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-regular fa-user text-xs animate-bounce"></i>
+                                </div>
+                                <input type="text" id="name" x-model="formData.name" required class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., John Doe" />
+                            </div>
+                        </div>
+
+                        <!-- City / Country -->
+                        <div class="space-y-2">
+                            <label for="cityCountry" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                            <span x-text="t('country')"></span>
+                            <span class="text-brand-red">*</span>
+                        </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-earth-americas text-xs animate-bounce"></i>
+                                </div>
+                                <input type="text" id="cityCountry" x-model="formData.cityCountry" required class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., London / United Kingdom" />
+                            </div>
+                        </div>
+
+                        <!-- E-mail -->
+                        <div class="space-y-2">
+                            <label for="email" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                            <span x-text="t('email_address')"></span>
+                            <span class="text-brand-red">*</span>
+                        </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-regular fa-envelope text-xs animate-bounce"></i>
+                                </div>
+                                <input type="email" id="email" x-model="formData.email" required class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., john@cobac.com" />
+                            </div>
+                        </div>
+
+                        <!-- Phone Number -->
+                        <div class="space-y-2">
+                            <label for="phone" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                            <span x-text="t('phone_number')"></span>
+                            <span class="text-brand-red">*</span>
+                        </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-phone text-xs animate-bounce"></i>
+                                </div>
+                                <input type="tel" id="phone" x-model="formData.phone" required class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., +44 7911 123456" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Step 2: Professional Profile -->
+                    <div x-show="currentStep === 2" x-transition:enter="transition ease-out duration-200" class="space-y-6" style="display: none">
+                        <div class="space-y-1">
+                            <h2 x-text="t('step_title_2')" class="text-xl font-bold font-display text-neutral-900 dark:text-white">
+                            </h2>
+                            <p x-text="t('step_desc_2')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                            </p>
+                        </div>
+
+                        <!-- Job -->
+                        <div class="space-y-2">
+                            <label for="job" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                        <span x-text="t('job_title')"></span>
+                    </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-briefcase text-xs animate-bounce"></i>
+                                </div>
+                                <!-- Removed 'required' attribute to make it optional -->
+                                <input type="text" id="job" x-model="formData.job" class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., Software Developer, UX Designer (Optional)" />
+                            </div>
+                        </div>
+
+                        <!-- Company -->
+                        <div class="space-y-2">
+                            <label for="company" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                  <span x-text="t('company_name')"></span>
+                  <span class="text-xs text-neutral-400 lowercase"
+                    >(Optional)</span
+                  >
+                </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-building text-xs"></i>
+                                </div>
+                                <input type="text" id="company" x-model="formData.company" class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
+                                    placeholder="e.g., CoBAC Creative Agency" />
+                            </div>
+                        </div>
+
+                        <!-- Invoice Address -->
+                        <div class="space-y-2">
+                            <label for="invoiceAddress" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                  <span x-text="t('invoice_address')"></span> <span class="text-brand-red">*</span>
+                </label>
+                            <div class="relative">
+                                <div class="absolute top-3 left-3.5 pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-file-invoice text-xs animate-bounce"></i>
+                                </div>
+                                <textarea id="invoiceAddress" x-model="formData.invoiceAddress" required rows="3" class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors resize-none"
+                                    placeholder="Enter official billing details, company name, and full address."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Step 3: Membership & referral -->
+                    <div x-show="currentStep === 3" x-transition:enter="transition ease-out duration-200" class="space-y-6" style="display: none">
+                        <div class="space-y-1">
+                            <h2 x-text="t('step_title_3')" class="text-xl font-bold font-display text-neutral-900 dark:text-white">
+                            </h2>
+                            <p x-text="t('step_desc_3')" class="text-xs text-neutral-500 dark:text-neutral-400">
+                            </p>
+                        </div>
+
+                        <!-- Membership Options -->
+                        <div class="space-y-3">
+                            <span x-text="t('membership_options')" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                   <span class="text-brand-red">*</span>
+                            </span>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- Day Pass -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'day_pass' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="day_pass"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('day_pass')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'day_pass' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'day_pass'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('day_pass_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+
+                                <!-- Hot Desk -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'hot_desk' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="hot_desk"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('hot_desk')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'hot_desk' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'hot_desk'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('hot_desk_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+
+                                <!-- Dedicated Desk -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'dedicated_desk' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="dedicated_desk"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('dedicated_desk')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'dedicated_desk' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'dedicated_desk'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('dedicated_desk_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+
+                                <!-- Virtual Office -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'virtual_office' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="virtual_office"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('virtual_office')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'virtual_office' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'virtual_office'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('virtual_office_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+
+                                <!-- Private Office -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'private_office' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="private_office"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('private_office')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'private_office' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'private_office'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('private_office_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+
+                                <!-- Flexi Membership -->
+                                <label class="relative flex flex-col justify-between p-4 rounded-xl border cursor-pointer select-none transition-all duration-200" :class="formData.membership === 'flexi_membership' ? 'border-brand-red bg-brand-red/5 dark:bg-brand-red/10 ring-1 ring-brand-red' : 'border-neutral-200 dark:border-neutral-800 bg-white dark:bg-black hover:border-neutral-300 dark:hover:border-neutral-700'">
+                    <input
+                      type="radio"
+                      name="membership"
+                      value="flexi_membership"
+                      x-model="formData.membership"
+                      class="sr-only"
+                    />
+                    <div class="flex items-center justify-between mb-1">
+                      <span x-text="t('flexi_memship')"
+                        class="text-sm font-bold text-neutral-900 dark:text-white"
+                        ></span
+                      >
+                      <div
+                        class="w-4 h-4 rounded-full border flex items-center justify-center"
+                        :class="formData.membership === 'flexi_membership' ? 'border-brand-red' : 'border-neutral-300 dark:border-neutral-700'"
+                      >
+                        <div
+                          class="w-2 h-2 rounded-full bg-brand-red"
+                          x-show="formData.membership === 'flexi_membership'"
+                        ></div>
+                      </div>
+                    </div>
+                    <span x-text="t('flexi_memship_desc')"
+                      class="text-[10px] text-neutral-500 dark:text-neutral-400"
+                      ></span
+                    >
+                  </label>
+                            </div>
+                        </div>
+
+                        <!-- How did you hear about us -->
+                        <div class="space-y-2">
+                            <label for="source" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
+                  <span x-text="t('about_us')"></span>
+                  <span class="text-brand-red">*</span>
+                </label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-hashtag text-xs animate-bounce"></i>
+                                </div>
+                                <select id="source" x-model="formData.source" required class="block w-full pl-10 pr-10 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white appearance-none focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors">
+                    <option
+                      value=""
+                      disabled
+                      selected
+                      class="bg-white dark:bg-neutral-900 text-neutral-400"
+                      x-text="t('select_an_option')"
+                    >
+                      
+                    </option>
+                    <option
+                      value="instagram"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                    >
+                      Instagram
+                    </option>
+                    <option
+                      value="facebook"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                    >
+                      Facebook
+                    </option>
+                    <option
+                      value="x"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                    >
+                      X (Twitter)
+                    </option>
+                    <option
+                      value="google"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                      x-text="t('google_search')"
+                    >
+                    </option>
+                    <option
+                      value="walk_in"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                    >
+                      Walk-In
+                    </option>
+                    <option
+                      value="other"
+                      class="bg-white dark:bg-neutral-900 text-neutral-900 dark:text-white"
+                      x-text="t('other')"
+                    >
+                    </option>
+                  </select>
+                                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KVKK Policy Checkbox -->
+                        <div class="pt-2">
+                            <label class="flex items-start gap-3 cursor-pointer select-none">
+    <input
+        type="checkbox"
+        required
+        x-model="kvkkAccepted"
+        class="mt-1 w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 bg-white dark:bg-black text-brand-red focus:ring-brand-red focus:ring-offset-0 focus:outline-none"
+            />
+    <span class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+        <span x-text="t('agreement_1')"></span>
+        <!-- Uses currentLang to determine the URL -->
+        <a :href="currentLang === 'en' ? 'https://cobac.com.tr/en/kvkk' : 'https://cobac.com.tr/kvkk'" 
+           class="text-brand-red hover:underline font-bold" 
+           target="_blank">
+            <span x-text="t('cobac_policy')"></span>
+        </a>
+        <span x-text="t('agreement_2')"></span>
+        <span class="text-brand-red">*</span>
+    </span>
+    </label>
+                        </div>
+
+                        <!-- Explicit Consent Checkbox -->
+                        <div class="pt-2">
+                            <label class="flex items-start gap-3 cursor-pointer select-none">
+    <input
+        type="checkbox"
+        required
+        x-model="formData.photoConsent"
+        class="mt-1 w-4 h-4 rounded border-neutral-300 dark:border-neutral-700 bg-white dark:bg-black text-brand-red focus:ring-brand-red focus:ring-offset-0 focus:outline-none"
+            />
+    <span class="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
+        <!-- Uses currentLang to determine the URL -->
+        <a :href="currentLang === 'en' ? 'https://cobac.com.tr/en/explicit-consent' : 'https://cobac.com.tr/acik-riza-metni'" 
+           class="text-brand-red hover:underline font-bold" 
+           target="_blank">
+            <span x-text="t('explicit_consent_1')"></span>
+        </a>
+        <span x-text="t('explicit_consent_2')"></span>
+    </span>
+    </label>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Action Buttons -->
+                    <div class="flex items-center justify-between pt-4 border-t border-neutral-200 dark:border-neutral-800">
+                        <!-- Back Button -->
+                        <div>
+                            <button type="button" x-show="currentStep > 1" @click="prevStep" class="px-5 py-2.5 rounded-xl border border-neutral-300 dark:border-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-900 dark:text-white text-sm font-bold transition-all duration-200 flex items-center gap-2 bg-white dark:bg-neutral-900">
+                  <i class="fa-solid fa-arrow-left text-xs"></i> <span x-text="t('back')"></span>
+                </button>
+                        </div>
+
+                        <!-- Next / Submit Button -->
+                        <div>
+                            <!-- Next Button -->
+                            <button type="button" x-show="currentStep < 3" @click="nextStep" class="px-6 py-2.5 rounded-xl bg-brand-red hover:bg-red-700 text-white text-sm font-bold tracking-wide transition-all duration-200 flex items-center gap-2 shadow-sm">
+                  <span x-text="t('next')"></span> <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+
+                            <!-- Submit Button -->
+                            <button type="submit" x-show="currentStep === 3" class="px-8 py-3 rounded-xl bg-gradient-to-r from-brand-red to-red-700 hover:from-red-600 hover:to-brand-red text-white text-sm font-bold tracking-wider uppercase transition-all duration-500 shadow-md shadow-brand-red/20 flex items-center gap-2">
+                  <i class="fa-solid fa-paper-plane text-xs"></i> <span x-text="t('complete_registration')"></span>
+                  
+                </button>
+                        </div>
+                    </div>
+                </form>
+                <!-- /SECTION: form_section -->
+            </div>
+    </div>
+    </main>
+
+    <!-- SECTION: footer -->
+    <footer class="w-full border-t border-neutral-200 dark:border-neutral-800 bg-transparent dark:bg-transparent py-8 mt-12 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6">
+            <!-- Left Copyright -->
+            <div class="text-s text-white text-center md:text-left space-y-1">
+                <span x-text="t('right_reserved')"></span>
+            </div>
+
+            <!-- Social Links & Quick Navigation -->
+            <div class="flex items-center gap-6">
+                <a href="https://www.instagram.com/cobacworkspace/" target="_blank" rel="noopener" class="text-white  hover:text-brand-red transition-colors text-xl" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.facebook.com/Cobac-Workspace-104771601656133" target="_blank" rel="noopener" class="text-white  hover:text-brand-red transition-colors text-xl" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook"></i>
+                </a>
+                <a href="https://cobac.com.tr" target="_blank" rel="noopener" class="text-white  hover:text-brand-red transition-colors text-xl" aria-label="Google">
+                    <i class="fa-brands fa-google"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <!-- /SECTION: footer -->
+
+    <!-- SECTION: whatsapp_cta -->
+    <!-- Floating WhatsApp Widget -->
+    <div class="fixed bottom-6 right-6 z-50 group">
+        <a href="https://wa.me/+902129055300" target="_blank" rel="noopener" class="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-3 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 active:scale-95">
+            <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-500 ease-out whitespace-nowrap text-xs font-semibold tracking-wide">
+          Need help? Chat on WhatsApp!
+        </span>
+            <i class="fa-brands fa-whatsapp text-xl"></i>
+        </a>
+    </div>
+    <!-- /SECTION: whatsapp_cta -->
+
+    <!-- Javascript Handlers -->
+    <script src="translations.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="script.js"></script>
+    </div>
+</body>
+
+</html>

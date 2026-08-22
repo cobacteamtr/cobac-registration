@@ -1,0 +1,21 @@
+{
+  "generationMode": "html_v1",
+  "entryFile": "index.html",
+  "dependencies": {},
+  "blocksUsed": [],
+  "assets": [
+    {
+      "id": "450db4aa-b1ee-4a0b-bc4e-08bd5ab5cb10",
+      "projectId": "0807cae9-e663-4709-9c77-93104d205835",
+      "ownerId": "e4fd9ed8-8951-47a3-88d2-7b4c831498dc",
+      "fileName": "logo_red-8e829149.svg",
+      "kind": "image",
+      "mimeType": "image/svg+xml",
+      "sizeBytes": 10823,
+      "storagePath": "e4fd9ed8-8951-47a3-88d2-7b4c831498dc/0807cae9-e663-4709-9c77-93104d205835/450db4aa-b1ee-4a0b-bc4e-08bd5ab5cb10-logo_red-8e829149.svg",
+      "usage": "inline_media",
+      "targetSlot": "logo",
+      "createdAt": "2026-08-10T11:22:12.913Z"
+    }
+  ]
+}
