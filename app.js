@@ -119,17 +119,9 @@ app.post('/api/submit-form', async(req, res) => {
 
 // Handles root URL
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    res.sendFile(path.join(__dirname));
 });
 
-// Handles explicit /public/ or /public/index.html requests
-app.get('/public', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-app.get('/public/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
 
 // --------------------------------------------------
 // Start Server
