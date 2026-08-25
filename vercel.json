@@ -1,0 +1,19 @@
+{
+    "version": 2,
+    "builds": [{
+        "src": "app.js",
+        "use": "@vercel/node",
+        "config": {
+            "includeFiles": [
+                "*.jpeg",
+                "*.png",
+                "*.jpg",
+                "index.html"
+            ]
+        }
+    }],
+    "routes": [
+        { "src": "/(.*\\.(png|jpg|jpeg|svg|css|js))", "dest": "/$1" },
+        { "src": "/(.*)", "destination": "/app.js" }
+    ]
+}

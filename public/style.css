@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Thin.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Thin.ttf') format('truetype');
     font-weight: 100;
     font-style: normal;
     font-display: swap;
@@ -12,7 +12,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Light.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Light.ttf') format('truetype');
     font-weight: 300;
     font-style: normal;
     font-display: swap;
@@ -20,7 +20,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Regular.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -28,7 +28,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Medium.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Medium.ttf') format('truetype');
     font-weight: 500;
     font-style: normal;
     font-display: swap;
@@ -36,7 +36,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-SemiBold.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-SemiBold.ttf') format('truetype');
     font-weight: 600;
     font-style: normal;
     font-display: swap;
@@ -44,7 +44,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Bold.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Bold.ttf') format('truetype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -52,7 +52,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-ExtraBold.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-ExtraBold.ttf') format('truetype');
     font-weight: 800;
     font-style: normal;
     font-display: swap;
@@ -60,7 +60,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Black.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Black.ttf') format('truetype');
     font-weight: 900;
     font-style: normal;
     font-display: swap;
@@ -73,7 +73,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-ThinItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-ThinItalic.ttf') format('truetype');
     font-weight: 100;
     font-style: italic;
     font-display: swap;
@@ -81,7 +81,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-LightItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-LightItalic.ttf') format('truetype');
     font-weight: 300;
     font-style: italic;
     font-display: swap;
@@ -89,7 +89,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-Italic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-Italic.ttf') format('truetype');
     font-weight: 400;
     font-style: italic;
     font-display: swap;
@@ -97,7 +97,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-MediumItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-MediumItalic.ttf') format('truetype');
     font-weight: 500;
     font-style: italic;
     font-display: swap;
@@ -105,7 +105,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-SemiBoldItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-SemiBoldItalic.ttf') format('truetype');
     font-weight: 600;
     font-style: italic;
     font-display: swap;
@@ -113,7 +113,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-BoldItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-BoldItalic.ttf') format('truetype');
     font-weight: 700;
     font-style: italic;
     font-display: swap;
@@ -121,7 +121,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-ExtraBoldItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-ExtraBoldItalic.ttf') format('truetype');
     font-weight: 800;
     font-style: italic;
     font-display: swap;
@@ -129,7 +129,7 @@
 
 @font-face {
     font-family: 'DM Sans';
-    src: url('../fonts/DMSans-BlackItalic.ttf') format('truetype');
+    src: url('/public/assets/fonts/DMSans-BlackItalic.ttf') format('truetype');
     font-weight: 900;
     font-style: italic;
     font-display: swap;
