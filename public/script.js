@@ -233,12 +233,11 @@ function cobacForm() {
             };
 
             try {
-                // Dynamically route endpoint based on environment (Local vs Production cPanel)
                 let endpoint = '/api/submit-form';
                 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     endpoint = 'http://localhost:3327/api/submit-form';
                 } else {
-                    endpoint = '/api/submit-form';
+                    endpoint = 'https://cobac-registration.vercel.app/api/submit-form';
                 }
                 const response = await fetch(endpoint, {
                     method: 'POST',
