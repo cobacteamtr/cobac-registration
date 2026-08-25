@@ -10,7 +10,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
-const PORT = 5518;
+const PORT = 3327;
 
 // Middleware
 app.use(express.json({ limit: '1mb' }));
