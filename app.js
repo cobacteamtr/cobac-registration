@@ -15,8 +15,7 @@ const PORT = 5518;
 // Middleware
 app.use(express.json({ limit: '1mb' }));
 
-app.use('/public', express.static(path.join(__dirname, 'public')));
-
+app.use(express.static(path.join(__dirname, 'public')));
 // Also serve static files from root for standard assets if referenced directly
 app.use(express.static(__dirname));
 
