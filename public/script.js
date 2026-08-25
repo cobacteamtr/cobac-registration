@@ -237,7 +237,8 @@ function cobacForm() {
                 if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
                     endpoint = 'http://localhost:3327/api/submit-form';
                 } else {
-                    endpoint = '/api/submit-form';                }
+                    endpoint = '/api/submit-form';
+                }
                 const response = await fetch(endpoint, {
                     method: 'POST',
                     headers: {
