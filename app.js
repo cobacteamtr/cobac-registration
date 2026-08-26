@@ -9,30 +9,34 @@ const __filename = fileURLToPath(
 const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(cors());
 const PORT = 3327;
 
 // Middleware
+app.use(cors());
 app.use(express.json({ limit: '1mb' }));
 
+// Static files
 app.use(express.static(path.join(__dirname, 'public')));
-// Also serve static files from root for standard assets if referenced directly
 app.use(express.static(__dirname));
 
-// Health Check
-app.get('/api/health', (req, res) => {
-    res.status(200).json({
-        success: true,
-        message: 'CoBAC registration backend is running'
-    });
-});
 
-// Google Sheets
+
+// GOOGLE SHEETS
+
 async function appendRecordToSheet(formData) {
+
+    // Authentication
+
     const auth = new google.auth.GoogleAuth({
-        credentials: process.env.GOOGLE_CREDENTIALS_JSON ? JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON) : undefined,
-        keyFile: process.env.GOOGLE_CREDENTIALS_JSON ? undefined : path.join(__dirname, 'credentials.json'),
-        scopes: ['https://www.googleapis.com/auth/spreadsheets']
+        credentials: process.env.GOOGLE_CREDENTIALS_JSON ?
+            JSON.parse(process.env.GOOGLE_CREDENTIALS_JSON) : undefined,
+
+        keyFile: process.env.GOOGLE_CREDENTIALS_JSON ?
+            undefined : path.join(__dirname, 'credentials.json'),
+
+        scopes: [
+            'https://www.googleapis.com/auth/spreadsheets'
+        ]
     });
 
     const client = await auth.getClient();
@@ -42,57 +46,127 @@ async function appendRecordToSheet(formData) {
         auth: client
     });
 
-    const spreadsheetId = '1jT7eP5uIaNcWDqOy8avoz938Dk00ZgUFVY-TLiMPdWo';
+    const spreadsheetId =
+        '1jT7eP5uIaNcWDqOy8avoz938Dk00ZgUFVY-TLiMPdWo';
 
-    const requestBody = {
-        values: [
-            [
-                formData.name,
-                formData.email,
-                formData.phone,
-                formData.cityCountry,
-                formData.job || '',
-                formData.company,
-                formData.invoiceAddress,
-                formData.membership,
-                formData.source,
-                formData.photoConsent ? 'Yes' : 'No',
-                new Date().toISOString()
-            ]
+
+    // Prepare registration data
+
+    const values = [
+        [
+            formData.name,
+            formData.email,
+            formData.phone || '',
+            formData.cityCountry || '',
+            formData.job || '',
+            formData.company || '',
+            formData.invoiceAddress || '',
+            formData.membership || '',
+            formData.source || '',
+            formData.photoConsent ? 'Yes' : 'No',
+            new Date().toISOString()
         ]
-    };
+    ];
 
-    await googleSheets.spreadsheets.values.append({
-        spreadsheetId,
-        range: 'Sheet1!A:A',
-        valueInputOption: 'USER_ENTERED',
-        requestBody
+
+    // Find existing rows
+
+    const existingData =
+        await googleSheets.spreadsheets.values.get({
+            spreadsheetId,
+            range: 'Sheet1!A:A'
+        });
+
+    const rows = existingData.data.values || [];
+
+
+    // Calculate next row
+
+
+
+    const nextRow = Math.max(rows.length + 1, 2);
+
+    console.log(
+        `Writing registration to Sheet1 row ${nextRow}`
+    );
+
+
+    // Write registration
+
+    const response =
+        await googleSheets.spreadsheets.values.update({
+            spreadsheetId,
+
+            range: `Sheet1!A${nextRow}:K${nextRow}`,
+
+            valueInputOption: 'USER_ENTERED',
+
+            requestBody: {
+                values
+            }
+        });
+
+
+    // Log response
+
+    console.log('Google Sheets update response:', {
+        updatedRange: response.data.updatedRange,
+        updatedRows: response.data.updatedRows,
+        updatedColumns: response.data.updatedColumns,
+        updatedCells: response.data.updatedCells
     });
+
+    return response;
 }
 
-// Form Submission
+
+// FORM SUBMISSION
+
 app.post('/api/submit-form', async(req, res) => {
+
     try {
+
         const formData = req.body;
+
         console.log('Received form submission');
 
+
         // Server-side validation
+
         if (!formData.name || !formData.email) {
+
             return res.status(400).json({
                 success: false,
                 error: 'Missing required fields.'
             });
+
         }
 
-        await appendRecordToSheet(formData);
+
+        // Save to Google Sheets
+
+        const response =
+            await appendRecordToSheet(formData);
+
+        // Success
 
         return res.status(200).json({
+
             success: true,
-            message: 'Record securely logged to sheet.'
+
+            message: 'Record securely logged to sheet.',
+
+            updatedRange: response.data.updatedRange
+
         });
 
     } catch (error) {
-        console.error('Google Sheets API Error:', error);
+
+        console.error(
+            'Google Sheets API Error:',
+            error?.response?.data || error
+        );
+
         return res.status(500).json({
             success: false,
             error: 'Failed to process submission.'
@@ -100,13 +174,24 @@ app.post('/api/submit-form', async(req, res) => {
     }
 });
 
-// Frontend Routing
+
+// FRONTEND ROUTING
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+
+    res.sendFile(
+        path.join(__dirname, 'index.html')
+    );
+
 });
 
 
-// Start Server
+// START SERVER
+
 app.listen(PORT, () => {
-    console.log(`CoBAC registration server running on port ${PORT}`);
+
+    console.log(
+        `CoBAC registration server running on port ${PORT}`
+    );
+
 });
