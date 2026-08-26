@@ -48,7 +48,7 @@ export default async function handler(req, res) {
 
         await googleSheets.spreadsheets.values.append({
             spreadsheetId,
-            range: 'Sheet1!A1:K',
+            range: 'Sheet1!A:A',
             valueInputOption: 'USER_ENTERED',
             requestBody
         });

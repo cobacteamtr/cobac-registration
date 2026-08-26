@@ -64,7 +64,7 @@ async function appendRecordToSheet(formData) {
 
     await googleSheets.spreadsheets.values.append({
         spreadsheetId,
-        range: 'Sheet1!A1:K',
+        range: 'Sheet1!A:A',
         valueInputOption: 'USER_ENTERED',
         requestBody
     });
