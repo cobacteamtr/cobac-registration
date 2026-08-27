@@ -431,15 +431,120 @@
                         <!-- Phone Number -->
                         <div class="space-y-2">
                             <label for="phone" class="block text-xs font-bold uppercase tracking-wider text-neutral-700 dark:text-neutral-300">
-                            <span x-text="t('phone_number')"></span>
-                            <span class="text-brand-red">*</span>
-                        </label>
+        <span x-text="t('phone_number')"></span>
+        <span class="text-brand-red">*</span>
+    </label>
+
                             <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-neutral-400 dark:text-neutral-500">
-                                    <i class="fa-solid fa-phone text-xs animate-bounce"></i>
+
+                                <!-- Phone Input Container -->
+                                <div class="flex w-full bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl focus-within:border-brand-red focus-within:ring-1 focus-within:ring-brand-red transition-colors">
+
+                                    <!-- Country Selector -->
+                                    <div class="relative flex-shrink-0">
+
+                                        <!-- Selected Country -->
+                                        <button type="button" @click="isOpen = !isOpen" class="h-full flex items-center gap-2 pl-3 pr-2 text-sm text-neutral-900 dark:text-white hover:bg-neutral-50 dark:hover:bg-neutral-900 rounded-l-xl transition-colors focus:outline-none" :aria-expanded="isOpen"
+                                            aria-label="Select country code">
+
+                    <!-- Flag -->
+                    <img
+                        :src="selectedCountryObj.flag"
+                        :alt="selectedCountryObj.code"
+                        class="w-6 h-4 object-cover rounded-sm flex-shrink-0"
+                        loading="lazy"
+                    >
+
+                    <!-- Dial Code -->
+                    <span
+                        x-text="selectedCountryObj.dial_code"
+                        class="whitespace-nowrap"
+                    ></span>
+
+                    <!-- Arrow -->
+                    <i
+                        class="fa-solid fa-chevron-down text-[9px] text-neutral-400 transition-transform duration-200"
+                        :class="{ 'rotate-180': isOpen }"
+                    ></i>
+                </button>
+
+                                        <!-- Country Dropdown -->
+                                        <div x-show="isOpen" x-transition.origin.top.left @click.outside="isOpen = false" class="absolute z-50 left-0 top-full mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white dark:bg-neutral-950 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-xl overflow-hidden"
+                                            style="display: none;">
+
+                                            <!-- Search -->
+                                            <div class="p-2 border-b border-neutral-200 dark:border-neutral-800">
+                                                <div class="relative">
+
+                                                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-xs text-neutral-400"></i>
+
+                                                    <input type="text" x-model="searchQuery" @keydown.escape="isOpen = false" placeholder="Search country or code..." class="w-full pl-9 pr-3 py-2.5 bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg text-xs text-neutral-900 dark:text-white placeholder-neutral-400 focus:outline-none focus:border-brand-red transition-colors">
+
+                                                </div>
+                                            </div>
+
+                                            <!-- Country List -->
+                                            <div class="max-h-64 overflow-y-auto">
+
+                                                <!-- Countries -->
+                                                <template x-for="country in filteredCountries" :key="country.code + country.dial_code">
+
+                            <button
+                                type="button"
+                                @click="selectCountry(country)"
+                                class="w-full flex items-center gap-3 px-3 py-2.5 text-left hover:bg-neutral-100 dark:hover:bg-neutral-900 transition-colors"
+                                :class="{
+                                    'bg-neutral-100 dark:bg-neutral-900':
+                                        country.dial_code === selectedCountryCode
+                                }"
+                            >
+
+                                <!-- Flag -->
+                                <img
+                                    :src="country.flag"
+                                    :alt="country.code"
+                                    class="w-6 h-4 object-cover rounded-sm flex-shrink-0"
+                                    loading="lazy"
+                                >
+
+                                <!-- Country Code -->
+                                <span
+                                    x-text="country.code"
+                                    class="w-8 text-xs font-semibold text-neutral-700 dark:text-neutral-300"
+                                ></span>
+
+                                <!-- Dial Code -->
+                                <span
+                                    x-text="country.dial_code"
+                                    class="text-xs text-neutral-500 dark:text-neutral-400"
+                                ></span>
+
+                            </button>
+
+                        </template>
+
+                                                <!-- No Results -->
+                                                <div x-show="filteredCountries.length === 0" class="px-4 py-6 text-center text-xs text-neutral-400">
+                                                    No countries found.
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <!-- Divider -->
+                                    <div class="my-2 w-px bg-neutral-200 dark:bg-neutral-800"></div>
+
+                                    <!-- Phone Number -->
+                                    <input type="tel" id="phone" x-model="rawPhoneNumber" @input="updateFullPhone()" required autocomplete="tel-national" class="block w-full min-w-0 px-3 py-3 bg-transparent border-0 rounded-r-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:ring-0"
+                                        placeholder="e.g., 7911 123456">
+
                                 </div>
-                                <input type="tel" id="phone" x-model="formData.phone" required class="block w-full pl-10 pr-4 py-3 bg-white dark:bg-black border border-neutral-200 dark:border-neutral-800 rounded-xl text-sm text-neutral-900 dark:text-white placeholder-neutral-400 dark:placeholder-neutral-600 focus:outline-none focus:border-brand-red focus:ring-1 focus:ring-brand-red transition-colors"
-                                    placeholder="e.g., +44 7911 123456" />
+
+                                <!-- Hidden full phone value -->
+                                <input type="hidden" name="phone" :value="formData.phone">
+
                             </div>
                         </div>
                     </div>
